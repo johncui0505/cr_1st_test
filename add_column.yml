@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: Variable_files/case_review_vars.yml
+#    - name: create a new database
+#      mysql_db: name={{db_name}} state=present login_user={{db_user}} login_password={{db_pass}}
+    #add column to specific table
+    - name: run case python file, to create add_column sql file
+      command: python3 {{python_file_loc}}{{add_col_python_file}} {{json_file_loc}}{{add_col_json}}
+    - name: insert sample data into case table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{add_col_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+

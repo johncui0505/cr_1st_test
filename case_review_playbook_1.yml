@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: Variable_files/case_review_vars.yml
+    - name: create a new database
+      mysql_db: name={{db_name}} state=present login_user={{db_user}} login_password={{db_pass}}
+    #case table
+    - name: run case python file, to create sql file
+      command: python3 {{python_file_loc}}{{case_python_file}} {{json_file_loc}}{{case_json | default(def_case_json)}}
+    - name: insert sample data into case table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{case_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+
+    #activity table
+    - name: run activity python file, to create sql file
+      command: python3 {{python_file_loc}}{{activity_python_file}} {{json_file_loc}}{{activity_json | default(def_activity_json)}}
+    - name: insert sample data into activity table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{activity_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+
+    #mile table
+    - name: run mile python file, to create sql file
+      command: python3 {{python_file_loc}}{{mile_python_file}} {{json_file_loc}}{{mile_json | default(def_mile_json)}}
+    - name: insert sample data into mile table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{mile_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+
+    #user table
+    - name: run USER python file, to create sql file
+      command: python3 {{python_file_loc}}{{user_python_file}} {{json_file_loc}}{{user_json | default(def_user_json)}}
+    - name: insert sample data into user table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{user_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+
+    #open case table
+    - name: run open_case python file, to create sql file
+      command: python3 {{python_file_loc}}{{open_case_python_file}} {{json_file_loc}}{{user_json | default(def_open_case_json)}}
+    - name: insert sample data into open_case table
+      mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{open_case_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+
+  #ignore_errors: yes
+    #- name: Feature 1 columns
+    #  mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{f1_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+    #- name: Feature 4 columns
+    #  mysql_db: name={{db_name}} state=import target={{sql_file_loc}}{{ls_sql_file}} login_user={{db_user}} login_password={{db_pass}}
+...
+#open yml file
+#step1- login to the mysql server, create/check if db_name is present 
+#step2- run the python file for opening a sql file for case table in location/sqlfile using the data in loaction/JSON file from salesforce for case table (this JSON is inputed into python file)
+#step2 continue-  {{case_json | default(def_case_json)}} -> implies, if new JSON file with updated data from salesforce, then we can mention it or else it will take default one and ignore any insert into table which are already present 
+#step3-continue running python file-> to write queries such that data can be inserted into the case table, give login/pw to write in mysql server 
+#step4- run python file for mile table-> input pyhton file location and name, input json data filename & location, give default file & new/updated file choice 
+#step5-continue running python file-> to write query in sql file  and give username/pw for mysql server to update in mile table for any new data
+#step6- run python file-> for user table-> sql file creation/ updating &inserting new data from JSOn file or else providing default data if no update
+#step7-insert data into user table in mysql
+#close yml file

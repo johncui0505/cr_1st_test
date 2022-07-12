@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: Variable_files/case_review_vars.yml
+    - name: remove file if it exists
+      command: sh /home/cradmin/ProjectFiles_test/Bash/f3_rm_csv.sh {{ item }}
+      with_items:
+      - L1
+      - L2
+      - L3
+      - L4
+      become: true
+    - name: Run Mysql L1 Procedure
+      mysql_query:
+            login_db: "{{db_name}}"
+            login_user: "{{db_user}}"
+            login_password: "{{db_pass}}"
+            query: call f3_l1_export();
+#    - name: Run Mysql L2 Procedure
+#      mysql_query:
+#            login_db: "{{db_name}}"
+#            query: call f3_l2_export();
+#            login_user: "{{db_user}}"
+#            login_password: "{{db_pass}}"
+#    - name: Run Mysql L3 Procedure
+#      mysql_query:
+#            login_db: "{{db_name}}"
+#            query: call f3_l3_export();
+#            login_user: "{{db_user}}"
+#            login_password: "{{db_pass}}"
+#    - name: Run Mysql L4 Procedure
+#      mysql_query:
+#            login_db: "{{db_name}}"
+#            query: call f3_l4_export();
+#            login_user: "{{db_user}}"
+#            login_password: "{{db_pass}}"
+    - name: Own CSV files
+      command:  sh /home/cradmin/ProjectFiles_test/Bash/f3_mv_csv.sh {{ item }}
+      become: true
+      with_items:
+      - L1
+      - L2
+      - L3
+      - L4
+    - name: Run Python file to create case excel files
+      command: python3 {{python_file_loc}}f3_csv_to_xls.py {{ item }}
+      with_items:
+      - L1
+      - L2
+      - L3
+      - L4
+...
+# to create the Excel format for the feature 3 data from csv file
+# run the playbook
+# include the variable file for name and location of all the files which are to br executed. Read the files for the items- L1, L2, L3, L4
+# export the data using f3_l1_export(), f3_l2_export(),f3_l3_export() and f3_l4_export function 
+# own the .csv file for each level
+# format the .csv type into .xls format via the python file for formatting for each item in list i.e., L1, L2, L3, L4S
+#end playbook        

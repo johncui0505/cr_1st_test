@@ -1,0 +1,47 @@
+# to export data over webex for feature 3 & level 1 manager 
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: Variable_files/case_review_vars.yml
+    - name: Ownershipa
+      command: sudo chown cradmin:cradmin -R /home/cradmin/ProjectFiles_test/Export_data/F3/
+    - name: remove file if it exists
+      command: sh /home/cradmin/ProjectFiles_test/Bash/f3_rm_csv.sh L1
+      become: true
+#    - name: Ownershipb
+#      command: sudo chown mysql /var/lib/mysql-files/
+    - name: send avg hrs spent in a week data to csv file
+      mysql_query:
+            login_db: "{{db_name}}"
+            query: call f3_l1_export();
+            login_user: "{{db_user}}"
+            login_password: "{{db_pass}}"
+    - name: Own CSV files
+      command:  sh /home/cradmin/ProjectFiles_test/Bash/f3_mv_csv.sh L1
+      become: true
+    - name: Run Python file to create markdown
+      command: python3 {{python_file_loc}}f3_csv_to_md.py L1
+    - name: Find ini files
+      find:
+        paths: /home/cradmin/ProjectFiles_test/Export_data/F3
+        file_type: file
+        recurse: Yes
+        patterns: "*.md"
+      register: files_matched
+      no_log: True
+    - name: Sending message to room # Sending the Command output to the room, you can the RoomID and Personal Token from WebEx Developer Portal
+      cisco_webex:
+        recipient_type: roomId
+        recipient_id: "Y2lzY29zcGFyazovL3VzL1JPT00vNWNiYjZmZTAtM2RiNy0xMWVjLWIwZWUtNmI5N2MzZWM2NTk2"
+        msg_type: markdown
+        personal_token: "YWQwZWI3NTQtOTgyZi00ZjRlLWIxYWItNDVhYmE3YWFhYzhiZGIxYzJkNTUtMGU4_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f"
+        msg: "{{lookup('file', item.path)}}"
+      loop: "{{ files_matched.files|flatten(levels=1)|sort(attribute='path')}}"
+      loop_control:
+        label: "{{ item.path }}"
+    - name: print output 
+      debug: msg="{{item.path|regex_findall(',(.+).com')|join('')| replace('_','@')}}.com"
+      loop: "{{ files_matched.files|flatten(levels=1) }}"
+      
+...

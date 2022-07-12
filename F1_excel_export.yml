@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_vars: Variable_files/case_review_vars.yml
+    - name: Run Python file to create case excel files
+      command: python3 {{python_file_loc}}f1_case_csv_to_xls.py {{ item }}
+      with_items:
+      - L1
+      - L2
+      - L3
+      - L4
+    - name: Run Python file to create effort excel files
+      command: python3 {{python_file_loc}}f1_effort_csv_to_xls.py {{ item }}
+      with_items:
+      - L1
+      - L2
+      - L3
+      - L4
+...
+#to create the excel format for the feature 1 case & effort for Level 1,2,3,4 reporting managers from csv file
+#run the playbook
+#include the variable file for name and location of all the files which are to br executed
+#use the python file to format from .csv to .xls format for both case and effort in seperate task for the list of different level reporting managers
+#end playbook  

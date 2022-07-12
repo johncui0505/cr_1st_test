@@ -1,0 +1,43 @@
+db_name : case_review_db
+db_user : "intern"
+db_pass : "Password123#@!"
+
+python_file_loc : /home/cradmin/ProjectFiles_test/Python_files/
+json_file_loc : /home/cradmin/ProjectFiles_test/Data/
+sql_file_loc : /home/cradmin/ProjectFiles_test/Sql_files/
+
+def_case_json : 'Case_bak.json'
+def_activity_json : 'Activity.json'
+def_mile_json : 'Milestone.json'
+def_user_json : 'User.json'
+def_open_case_json : 'Open_Case.json'
+def_AB_json : 'AB.json'
+
+case_python_file : dyn_case_to_sqlfile.py
+activity_python_file : dyn_activity_to_sqlfile.py
+mile_python_file : dyn_mile_to_sqlfile.py
+user_python_file : dyn_user_to_sqlfile.py
+open_case_python_file : dyn_open_case_to_sqlfile.py
+AB_python_file : dyn_AB_to_sqlfile.py
+
+# Add column variables
+add_col_json : 'Case.json'
+add_col_sql_file : add_col.sql
+add_col_python_file : add_col.py
+
+
+case_sql_file : case_table.sql
+activity_sql_file  : activity_table.sql
+mile_sql_file : mile_table.sql
+user_sql_file : user_table.sql
+open_case_sql_file : open_case_table.sql
+f1_case_sql_file : f1_case.sql
+f1_effort_sql_file : f1_effort.sql
+f1_sql_file : f1_table.sql
+f2_AB_sql_file : f2_AB.sql
+f4_sql_file : ls_table.sql
+avg_sql_file : avg_table.sql
+avg_sql_file_L1 : avg_table_L1.sql
+avg_sql_file_L2 : avg_table_L2.sql
+
+recipient_id : jiacui@cisco.com

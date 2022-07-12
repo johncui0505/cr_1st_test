@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Install required software
+
+    apt:
+      name: apache2
+      state: present
+
+#      sudo: yes
+#      with_items:
+#        - apache2
+#        - build-essential
+#        - python-dev
+#        - libmysqlclient-dev
+#        - python-mysqldb
+#        - mysql-server
+#        - mysql-client
+#        - php7.0
+#        - php7.0-mysql
+#        - libapache2-mod-php7.0
+#        - php7.0-cli
+#        - php7.0-cgi
+#        - php7.0-gd
+#        - php7.0-mcrypt
