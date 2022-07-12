@@ -1,7 +1,7 @@
 # to export data over webex for feature 3 & level 1 manager 
 ---
-- hosts: localhost
-  connection: local
+- hosts: cr_prod_vm
+#  connection: local
   tasks:
     - include_vars: Variable_files/case_review_vars.yml
     - name: Ownershipa
