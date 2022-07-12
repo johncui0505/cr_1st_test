@@ -1,2 +1,2 @@
 [cr_prod_vm]
-10.124.166.170 ansible_connection=ssh ansible_ssh_user=cradmin ansible_ssh_pass=C1sc0@123
+10.124.144.170 ansible_connection=ssh ansible_ssh_user=cradmin ansible_ssh_pass=C1sc0@123
