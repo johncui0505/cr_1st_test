@@ -1,6 +1,6 @@
 ---
-- hosts: localhost
-  connection: local
+- hosts: cr_prod_vm
+#  connection: local
   tasks:
     - include_vars: Variable_files/case_review_vars.yml
     - name: create a new database
